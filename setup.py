@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="flask-maker",
-    version="1.0.1",
+    version="1.0.3",
     description="A tool to create flask projects faster with a scalable setup.",  # Optional
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -32,7 +32,7 @@ setup(
     keywords="flask, flask-maker",
     packages=find_packages(),
     python_requires=">=3.6, <4",
-    install_requires=["flask==2.0.1", "click==7.1.2"],
+    install_requires=["flask==2.0.1", "click==7.1.2", "python-slugify"],
     project_urls={
         "Bug Reports": "https://github.com/shahriyardx/flask-maker/issues",
         "Source": "https://github.com/shahriyardx/flask-maker/",
