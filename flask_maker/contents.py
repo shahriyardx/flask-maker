@@ -160,7 +160,7 @@ from .errors import *
 """
 
 VIEWS_TEXT = """
-from flask  import render_template, make_response
+from flask import render_template, make_response
 
 def index():
     template = render_template("index.html")
