@@ -28,7 +28,10 @@ def make_dir(name, back=True, empty=True):
     if empty:
         empty_folder(os.getcwd())
 
-    yield None
+    if not empty and os.listdir(os.getcwd()):
+        yield f"Directory {name} is not empty."
+    else:
+        yield None
 
     if back:
         go_back()
