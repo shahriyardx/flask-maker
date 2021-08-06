@@ -2,6 +2,7 @@ import os
 from contextlib import contextmanager
 from .helpers import go_back, empty_folder
 
+
 @contextmanager
 def open_dir(name, back=True):
     """Opens a directory"""

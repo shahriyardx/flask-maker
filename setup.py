@@ -26,7 +26,9 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    entry_points={"console_scripts": ["flask-maker = flask_maker:cli", "fm = flask_maker:cli"]},
+    entry_points={
+        "console_scripts": ["flask-maker = flask_maker:cli", "fm = flask_maker:cli"]
+    },
     keywords="flask, flask-maker",
     packages=find_packages(),
     python_requires=">=3.6, <4",
