@@ -22,11 +22,20 @@ if __name__ == "__main__":
     cli()
 """
 
+URLS_TEXT = """
+from .views import index
+
+url_patterns = [
+    ['/', index],
+]
+"""
+
 INIT_TEXT = """
 import os
 import importlib
-from flask import Flask, render_template, make_response
+from flask import Flask
 from .config import config
+from .urls import url_patterns
 
 app = Flask(__name__)
 app.config.from_object(config['development']) # Change it to production for production use
@@ -41,15 +50,11 @@ if os.path.exists(apps_folder):
             module = importlib.import_module(f'.{path}', package=f"{app.name}.apps")
             _apps[path] = getattr(module, path)
 
-for _name, _module in _apps.items():
-    app.register_blueprint(_module, url_prefix=f"/{_name}")
+for _module in _apps.values():
+    app.register_blueprint(_module)
 
-@app.route('/')
-async def index():
-    template = render_template("index.html")
-    response = make_response(template)
-
-    return response
+for pattern in url_patterns:
+    app.add_url_rule(rule=pattern[0], view_func=pattern[1])
 """
 
 CONFIG_TEXT = """
@@ -144,18 +149,29 @@ STYLE_TEXT = """
 
 BLP_TEXT = """
 from flask import Blueprint
+from .urls import url_patterns
 
-{app_name} = Blueprint("{app_name}", __name__)
+{app_name} = Blueprint("{app_name}", __name__, url_prefix="/{app_name}")
 
-from .views import *
+for pattern in url_patterns:
+    {app_name}.add_url_rule(rule=pattern[0], view_func=pattern[1])
+
 from .errors import *
 """
 
 VIEWS_TEXT = """
-from . import {app_name}
+from flask  import render_template, make_response
+
+def index():
+    template = render_template("index.html")
+    response = make_response(template)
+
+    return response
+"""
+
+BLP_VIEWS_TEXT = """
 from flask import render_template, make_response
 
-@{app_name}.route('/')
 def index():
     template = render_template('{app_name}/index.html')
     response = make_response(template)
