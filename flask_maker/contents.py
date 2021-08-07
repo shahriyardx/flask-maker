@@ -48,10 +48,17 @@ if os.path.exists(apps_folder):
         module_path = os.path.join(apps_folder, path)
         if os.path.isdir(module_path) and not path.startswith('__'):
             module = importlib.import_module(f'.{path}', package=f"{app.name}.apps")
-            _apps[path] = getattr(module, path)
+            try:
+                _apps[path] = getattr(module, path)
+            except:
+                print(f"[-] Filed to import blueprint from 'apps/{path}' directory.")
+                
 
-for _module in _apps.values():
-    app.register_blueprint(_module)
+for _key, _module in _apps.items():
+    try:
+        app.register_blueprint(_module)
+    except Exception as e:
+        print(f'[-] Failed to register blueprint {_key}. Reason :', e)
 
 for pattern in url_patterns:
     app.add_url_rule(rule=pattern[0], view_func=pattern[1])
