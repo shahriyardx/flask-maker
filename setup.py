@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="flask-maker",
-    version="2.0.3",
+    version="2.0.4",
     description="A tool to create flask projects faster with a scalable setup.",  # Optional
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -26,7 +26,7 @@ URLS_TEXT = """
 from .views import index
 
 url_patterns = [
-    ['/', index],
+    ['/', index, ['GET']],
 ]
 """
 
@@ -61,7 +61,12 @@ for _key, _module in _apps.items():
         print(f'[-] Failed to register blueprint {_key}. Reason :', e)
 
 for pattern in url_patterns:
-    app.add_url_rule(rule=pattern[0], view_func=pattern[1])
+    try:
+        methods = pattern[2]
+    except:
+        methods = ['GET']
+    
+    app.add_url_rule(rule=pattern[0], view_func=pattern[1], methods=methods)
 """
 
 CONFIG_TEXT = """
@@ -161,7 +166,12 @@ from .urls import url_patterns
 {app_name} = Blueprint("{app_name}", __name__, url_prefix="/{app_name}")
 
 for pattern in url_patterns:
-    {app_name}.add_url_rule(rule=pattern[0], view_func=pattern[1])
+    try:
+        methods = pattern[2]
+    except:
+        methods = ['GET']
+    
+    {app_name}.add_url_rule(rule=pattern[0], view_func=pattern[1], methods=methods)
 
 from .errors import *
 """
