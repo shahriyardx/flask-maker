@@ -2,7 +2,7 @@ import os
 import click
 from .contents import *
 from slugify import slugify
-from .context import make_dir, open_dir
+from .context import make_dir, open_dir, go_back
 from .helpers import create_file
 
 TEMPLATES_DIR = "templates"
@@ -17,7 +17,9 @@ def cli():
 @cli.command("startproject")
 @click.option("--name", "-n", help="Project name", default="")
 @click.option("--empty", "-e", help="Delete all files in the folder if its not empty", is_flag=True, default=False)
-def start_project(name, empty):
+@click.option("--git", "-g", help="Initialize a git repo on on the project", is_flag=True, default=False)
+@click.option("--code", "-c", help="Attempts to open the files in vscode if installed", is_flag=True, default=False)
+def start_project(name, empty, git, code):
     """Creates a flask project"""
     if not name:
         print("Project Name : ", end="")
@@ -48,6 +50,19 @@ def start_project(name, empty):
     print(
         f"Flask project created. Use `cd {folder_name}` and open with your favourite code editor."
     )
+
+    if git:
+        go_back()
+        try: 
+            os.system("git init")
+        except:
+            print("[-] Unable to initialize a git repo. Make sure git is installed.")
+    
+    if code:
+        try:
+            os.system("code .")
+        except:
+            print("[-] Unable to open with Visual studio code.")
 
 
 @cli.command("startapp")
