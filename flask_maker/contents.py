@@ -23,10 +23,20 @@ if __name__ == "__main__":
 """
 
 URLS_TEXT = """
+from .helpers.models import Path
 from .views import index
 
 url_patterns = [
-    ['/', index, ['GET']],
+    Path('/', index, ['GET']),
+]
+"""
+
+BLP_URLS_TEXT = """
+from ...helpers.models import Path
+from .views import index
+
+url_patterns = [
+    Path('/', index, ['GET']),
 ]
 """
 
@@ -60,13 +70,8 @@ for _key, _module in _apps.items():
     except Exception as e:
         print(f'[-] Failed to register blueprint {_key}. Reason :', e)
 
-for pattern in url_patterns:
-    try:
-        methods = pattern[2]
-    except:
-        methods = ['GET']
-    
-    app.add_url_rule(rule=pattern[0], view_func=pattern[1], methods=methods)
+for path in url_patterns:
+    app.add_url_rule(rule=path.url, view_func=path.view_func, methods=path.methods)
 """
 
 CONFIG_TEXT = """
@@ -165,13 +170,8 @@ from .urls import url_patterns
 
 {app_name} = Blueprint("{app_name}", __name__, url_prefix="/{app_name}")
 
-for pattern in url_patterns:
-    try:
-        methods = pattern[2]
-    except:
-        methods = ['GET']
-    
-    {app_name}.add_url_rule(rule=pattern[0], view_func=pattern[1], methods=methods)
+for path in url_patterns:
+    {app_name}.add_url_rule(rule=path.url, view_func=path.view_func, methods=path.methods)
 
 from .errors import *
 """
@@ -224,4 +224,17 @@ BLP_INDEX = """
     <p><span class="qspan">{app_name}</span> app's index view</p>
 </body>
 </html>
+"""
+
+MODELS_TEXT = """
+from dataclasses import dataclass, field
+from typing import Any, List
+
+
+@dataclass
+class Path:
+    url: str
+    view_func: Any
+    methods: List[str] = field(default_factory=lambda: ["GET"])
+
 """

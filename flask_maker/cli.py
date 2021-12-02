@@ -41,6 +41,9 @@ def start_project(name, empty, git, code):
             create_file("views.py", VIEWS_TEXT)
             create_file("urls.py", URLS_TEXT)
 
+            with make_dir("helpers", back=True) as _:
+                create_file("models.py", MODELS_TEXT)
+
             with make_dir(TEMPLATES_DIR, back=True) as _:
                 create_file("index.html", INDEX_TEXT)
 
@@ -103,7 +106,7 @@ def start_app(name, empty):
             create_file("__init__.py", BLP_TEXT, {"{app_name}": app_name})
             create_file("views.py", BLP_VIEWS_TEXT, {"{app_name}": app_name})
             create_file("errors.py", ERRORS_TEXT, {"{app_name}": app_name})
-            create_file("urls.py", URLS_TEXT)
+            create_file("urls.py", BLP_URLS_TEXT)
 
     with open_dir(STATIC_DIR, back=True) as _:
         with make_dir(app_name, back=True) as _:
